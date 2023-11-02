@@ -1,9 +1,6 @@
 from flask import Flask, request, jsonify
 import pandas as pd
 from joblib import load
-
-
-
 app = Flask(__name__)
 app.debug = True
 
