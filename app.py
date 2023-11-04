@@ -6,7 +6,7 @@ app.debug = True
 
 # Load the trained model
 post_result = {}
-model=load("trained_model.pkl")
+model=load("./trained_model.pkl")
 
 
 @app.route('/')
