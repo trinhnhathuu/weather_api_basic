@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, request, jsonify
 import pandas as pd
 from joblib import load
@@ -5,9 +6,9 @@ app = Flask(__name__)
 app.debug = True
 
 # Load the trained model
-post_result = {}
+post_result = []
 model=load("./trained_model.pkl")
-
+timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 @app.route('/')
 def index():
@@ -24,7 +25,10 @@ def predict():
     X_test = pd.DataFrame([[RH2M_value, T2MDEW_value, TS_value, T2M_MAX_value, T2M_MIN_value]],
                          columns=["RH2M", "T2MDEW", "TS", "T2M_MAX", "T2M_MIN"])
     y_pred = model.predict(X_test)
-    post_result.update({'T2M': y_pred[0,0], 'PRECTOTCORR': y_pred[0,1]})
+    prediction_data = {'timestamp': timestamp, 'T2M': y_pred[0, 0], 'PRECTOTCORR': y_pred[0, 1]}
+
+    # Append the dictionary to the post_result list
+    post_result.append(prediction_data)
     return "Đã dự đoán"
 @app.route('/api/weather')
 def home():
